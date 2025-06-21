@@ -1,320 +1,1132 @@
-<!DOCTYPE html>
-<html lang="fr">
+@extends('layouts.master')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>OnYVa – L'application sociale et professionnelle locale</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+@push('style')
     <style>
         body {
             font-family: 'Fredoka', sans-serif;
-        }
-
-        .hero {
-            background: linear-gradient(135deg, #571c87, #571c874d);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-        }
-
-        .section-title {
-            color: #571c87;
-            margin-top: 60px;
-            margin-bottom: 30px;
-        }
-
-        .btn-purple {
-            background-color: #571c87;
-            color: white;
-            border: none;
-        }
-
-        .btn-purple:hover {
-            background-color: #3f1364;
-            color: white;
+            background-color: #f8f9fa;
+            /* Lighter background for overall page */
         }
 
         .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 1030;
+            background-color: #e6ccff;
+            /* Changed to match image-gallery */
+            border-bottom: none;
+            /* Removed border */
         }
 
-        footer {
-            background: #1a1a1a;
-            color: #ccc;
+        .navbar .nav-link {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .navbar .nav-link:hover {
+            color: #571c87;
+        }
+
+        .navbar-brand {
+            font-family: 'Fredoka', cursive;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .hero {
+            background-color: #e6ccff;
+            /* Changed to match image-gallery */
+            padding: 100px 0 60px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #1e1e1e;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .hero .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            margin: 10px;
+        }
+
+        .btn-dark {
+            background-color: #1e1e1e;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-outline-dark {
+            border: 2px solid #1e1e1e;
+            color: #1e1e1e;
+        }
+
+        .image-gallery {
+            background-color: #e6ccff;
             padding: 40px 0;
         }
 
-        .app-screenshot {
-            max-width: 100%;
-            border-radius: 1rem;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        .image-gallery img {
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            object-fit: cover;
         }
 
-        .card-download {
-            position: relative;
-            background-color: #571c874d;
-            border-radius: 16px;
-            padding-left: 40px;
+        /* Styles for the "Notifications" section */
+        .notifications-section {
+            padding: 80px 0;
+            background-color: #f8f9fa;
+            /* Matches the background of the mockup */
+        }
+
+        .notifications-content {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            /* Subtle shadow like in the image */
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            min-height: 280px;
-            overflow: visible;
-            /* Pour permettre à l'image de dépasser */
+            /* Vertically align content */
+            min-height: 400px;
+            /* Ensure content and image align */
         }
 
-        .card-download .image-overlap {
-            position: relative;
-            /* plus besoin d’absolu si on veut une gestion plus naturelle */
-            max-width: 300px;
-            height: 500px;
-            margin-right: -40px;
-            margin-top: -120px;
-            /* ou -60px selon le style souhaité */
+        .notifications-text h4 {
+            color: #8c8c8c;
+            /* Lighter grey for "Notifications" heading */
+            font-weight: 500;
+            margin-bottom: 10px;
+            font-size: 1rem;
         }
 
-        .card-download h3 {
-            font-size: 24px;
+        .notifications-text h2 {
+            font-size: 2.5rem;
             font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .notifications-text p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .notifications-img-container {
+            border-radius: 20px;
+            /* More rounded corners for the image container */
+            overflow: hidden;
+            /* Ensures image respects border-radius */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            /* Stronger shadow for the image container */
+            height: 100%;
+            /* Take full height of the parent column */
+            min-height: 450px;
+            /* A minimum height to ensure the image box is substantial */
+        }
+
+        .notifications-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Cover the container while maintaining aspect ratio */
+            border-radius: 20px;
+            /* Apply border radius directly to the image */
+        }
+
+        .notifications-section .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            /* Slightly more rounded buttons */
+        }
+
+        .notifications-section .btn-outline-dark {
+            border: 2px solid #571c87;
+            /* Adjust outline button color to match theme */
+            color: #571c87;
+        }
+
+        .notifications-section .btn-outline-dark:hover {
+            background-color: #571c87;
+            color: #fff;
+        }
+
+        .notifications-section .btn-dark {
+            background-color: #571c87;
+            /* Adjust dark button color to match theme */
+            color: #fff;
+        }
+
+        .notifications-section .btn-dark:hover {
+            background-color: #4a1773;
+        }
+
+        /* Adjustments for the existing "Propose Activities" section to integrate better */
+        .py-5 {
+            padding-top: 5rem !important;
+            padding-bottom: 5rem !important;
+        }
+
+        .bg-dark h2 {
+            font-size: 2.2rem;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+
+        .bg-dark p {
+            font-size: 1.1rem;
+        }
+
+        .bg-dark .bi {
+            color: #e6ccff;
+            /* A lighter color for icons in dark section */
+        }
+
+        .bg-dark h6 {
+            color: #fff;
+        }
+
+        .bg-dark small {
+            color: #ccc;
+        }
+
+        /* Styles for the "Engage in Spontaneous Activities" section */
+        .engage-section {
+            padding: 80px 0;
+            text-align: center;
+            background-color: #f8f9fa;
+            /* Consistent light background */
+        }
+
+        .engage-section h4.sub-heading {
+            color: #8c8c8c;
+            font-weight: 500;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .engage-section h2.main-heading {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .engage-section p.lead-text {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto 50px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .feature-item .icon-box {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            background-color: #f2e6fb;
+            /* Light purple circle background */
+            border-radius: 50%;
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+            /* Size of the icon */
+            color: #571c87;
+            /* Color of the icon */
+            border: 1px solid #571c87;
+            /* Small border for the circle */
+        }
+
+        .feature-item h5 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
             margin-bottom: 10px;
         }
 
-        .card-download p {
-            font-size: 16px;
+        .feature-item p {
+            font-size: 0.95rem;
+            color: #777;
+            line-height: 1.6;
+        }
+
+        .engage-section .buttons-group .btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            margin: 10px;
+            font-size: 1.1rem;
+        }
+
+        .engage-section .buttons-group .btn-outline-dark {
+            border: 2px solid #1e1e1e;
+            /* Using dark for these buttons as per image */
+            color: #1e1e1e;
+        }
+
+        .engage-section .buttons-group .btn-dark {
+            background-color: #1e1e1e;
+            color: #fff;
+            border: none;
+        }
+
+        .engage-section .buttons-group .btn-outline-dark:hover {
+            background-color: #1e1e1e;
+            color: #fff;
+        }
+
+        /* Styles for the "Discover New Friends" section */
+        .discover-section {
+            padding: 100px 0;
+            background-color: #f0f0f0;
+            /* Lighter grey background as in the image */
+        }
+
+        .discover-section .text-content {
+            padding-right: 40px;
+            /* Space between text and image */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* Center content vertically */
+            height: 100%;
+            /* Take full height of the column */
+        }
+
+        .discover-section h2 {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.2;
+        }
+
+        .discover-section p {
+            font-size: 1.15rem;
+            color: #555;
+            line-height: 1.6;
+            max-width: 550px;
+            /* Limit text width */
+        }
+
+        .discover-section .image-container {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            /* Stronger shadow for the image */
+            height: 100%;
+            /* Ensure image container takes full height */
+        }
+
+        .discover-section .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Cover the container */
+            display: block;
+            /* Remove extra space below image */
+        }
+
+        /* Styles for the "Join the Adventure" section (Call to Action) */
+        .call-to-action-section {
+            padding: 80px 0;
+            text-align: center;
+            background-color: #ffffff;
+            /* White background as in the image */
+        }
+
+        .call-to-action-section h2 {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #333;
             margin-bottom: 20px;
         }
 
-        @media (max-width: 768px) {
-            .card-download {
-                flex-direction: column;
+        .call-to-action-section p {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            /* Center text and add space below */
+        }
+
+        .call-to-action-section .btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            margin: 0 10px;
+            /* Space between buttons */
+        }
+
+        .call-to-action-section .btn-primary-custom {
+            background-color: #e6ccff;
+            /* Light purple from the hero section, as seen in image */
+            color: #1e1e1e;
+            /* Dark text on light button */
+            border: none;
+        }
+
+        .call-to-action-section .btn-primary-custom:hover {
+            background-color: #d1b3f0;
+            /* Slightly darker purple on hover */
+        }
+
+        .call-to-action-section .btn-outline-secondary-custom {
+            border: 2px solid #1e1e1e;
+            /* Dark outline */
+            color: #1e1e1e;
+            /* Dark text */
+            background-color: transparent;
+        }
+
+        .call-to-action-section .btn-outline-secondary-custom:hover {
+            background-color: #1e1e1e;
+            color: #fff;
+        }
+
+        /* Styles for the Testimonial Section */
+        .testimonial-section {
+            padding: 80px 0;
+            background-color: #ffffff;
+            /* White background as in the image */
+            text-align: center;
+        }
+
+        .testimonial-section .webflow-logo {
+            margin-bottom: 40px;
+            /* Space below the logo */
+            width: 120px;
+            /* Adjust size as needed */
+        }
+
+        .testimonial-section .testimonial-quote {
+            font-size: 2rem;
+            font-weight: 500;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.5;
+        }
+
+        .testimonial-section .author-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-section .author-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .testimonial-section .author-title {
+            font-size: 1rem;
+            color: #777;
+            margin-bottom: 40px;
+        }
+
+        .testimonial-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            /* Space between arrows and dots */
+        }
+
+        .testimonial-navigation .nav-arrow {
+            background-color: transparent;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-navigation .nav-arrow:hover {
+            background-color: #f0f0f0;
+            border-color: #ccc;
+        }
+
+        .testimonial-navigation .nav-dots span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: #ddd;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .testimonial-navigation .nav-dots span.active {
+            background-color: #571c87;
+            /* Active dot color */
+        }
+
+        /* Styles for the "Our Team" section */
+        .team-section {
+            padding: 80px 0;
+            background-color: #f8f9fa;
+            /* Light background */
+            text-align: center;
+        }
+
+        .team-section .team-heading {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #8c8c8c;
+            margin-bottom: 10px;
+        }
+
+        .team-section .main-heading {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .team-section .team-description {
+            font-size: 1.1rem;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto 50px;
+        }
+
+        .team-member-card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            /* Ensure cards are same height */
+        }
+
+        .team-member-card .member-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 4px solid #f2e6fb;
+            /* Light purple border around avatar */
+        }
+
+        .team-member-card .member-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .team-member-card .member-role {
+            font-size: 1rem;
+            color: #571c87;
+            /* Purple for the role */
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .team-member-card .member-bio {
+            font-size: 0.95rem;
+            color: #777;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            flex-grow: 1;
+            /* Allows bio to take available space */
+        }
+
+        .team-member-card .social-links a {
+            color: #777;
+            font-size: 1.4rem;
+            margin: 0 8px;
+            transition: color 0.3s ease;
+        }
+
+        .team-member-card .social-links a:hover {
+            color: #571c87;
+            /* Purple on hover */
+        }
+
+        /* Styles for the "We're hiring!" block */
+        .hiring-block {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 30px;
+            /* Space from team members */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hiring-block h3 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .hiring-block p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        .hiring-block .btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            background-color: #1e1e1e;
+            /* Dark button */
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .hiring-block .btn:hover {
+            background-color: #333;
+        }
+
+        /* Footer styles */
+        .footer-section {
+            background-color: #1e1e1e;
+            /* Dark background as per image */
+            color: #fff;
+            padding: 80px 0 20px;
+            /* Padding top, bottom, and extra for copyright section */
+            font-size: 0.95rem;
+        }
+
+        .footer-section h5 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #fff;
+        }
+
+        .footer-section .footer-logo {
+            font-family: 'Fredoka', cursive;
+            /* Assuming logo style for footer matches navbar brand */
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 25px;
+            display: block;
+            /* Ensures it takes up its own line */
+        }
+
+        .footer-section .newsletter-form .form-control {
+            background-color: #333;
+            border: 1px solid #555;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+
+        .footer-section .newsletter-form .form-control::placeholder {
+            color: #bbb;
+        }
+
+        .footer-section .newsletter-form .btn-subscribe {
+            background-color: #e6ccff;
+            /* Light purple button */
+            color: #1e1e1e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .footer-section .newsletter-form .btn-subscribe:hover {
+            background-color: #d1b3f0;
+        }
+
+        .footer-section .newsletter-text {
+            color: #ccc;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+
+        .footer-section .newsletter-text a {
+            color: #e6ccff;
+            /* Purple link for privacy policy */
+            text-decoration: none;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            /* Darker line separating copyright from main footer */
+            padding-top: 20px;
+            margin-top: 40px;
+            /* Space above the line */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            /* Allow wrapping on small screens */
+        }
+
+        .footer-bottom .copyright {
+            color: #ccc;
+        }
+
+        .footer-bottom .bottom-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-right: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-bottom .bottom-links a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom .footer-social-icons a {
+            color: #ccc;
+            font-size: 1.2rem;
+            margin-left: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-bottom .footer-social-icons a:hover {
+            color: #fff;
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 991.98px) {
+
+            /* Adjust for medium screens and below */
+            .footer-section .col-lg-2,
+            .footer-section .col-lg-3,
+            .footer-section .col-lg-4 {
+                margin-bottom: 30px;
+                /* Add space between stacked columns */
                 text-align: center;
-                padding: 30px 20px;
             }
 
-            .card-download .image-overlap {
-                margin: 20px auto 0;
-                max-width: 180px;
+            .footer-section .newsletter-form .input-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-section .newsletter-form .btn-subscribe {
+                margin-left: 0;
+                margin-top: 15px;
+                width: 100%;
+                /* Full width button */
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-bottom .copyright {
+                margin-bottom: 15px;
+            }
+
+            .footer-bottom .bottom-links a {
+                display: block;
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
+
+            .footer-bottom .footer-social-icons {
+                margin-top: 15px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .discover-section .text-content {
+                padding-right: 15px;
+                padding-bottom: 30px;
+                /* Add space below text on small screens */
+                text-align: center;
+            }
+
+            .discover-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .discover-section p {
+                max-width: 100%;
+            }
+
+            .discover-section .image-container {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+
+            .call-to-action-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .call-to-action-section p {
+                font-size: 1rem;
+                margin-bottom: 30px;
+            }
+
+            .call-to-action-section .btn {
+                display: block;
+                /* Stack buttons on small screens */
+                width: 80%;
+                margin: 15px auto;
+            }
+
+            .testimonial-section .testimonial-quote {
+                font-size: 1.5rem;
+            }
+
+            .testimonial-navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .team-section .main-heading {
+                font-size: 2.2rem;
+            }
+
+            .team-member-card {
+                padding: 20px;
+            }
+
+            .team-member-card .member-avatar {
+                width: 100px;
+                height: 100px;
+            }
+
+            .hiring-block h3 {
+                font-size: 1.8rem;
             }
         }
     </style>
-</head>
+@endpush
 
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #571c87;">
+@section('content')
+    <section class="hero">
         <div class="container">
-            <a class="navbar-brand" href="#">OnYVa</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Accueil</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#apropos">À propos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#fonctionnement">Fonctionnement</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#telechargement">Télécharger</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                </ul>
+            <h1>Connectez-vous spontanément avec <br> <strong>OnYVa dès aujourd'hui !</strong></h1>
+            <p>OnYVa est votre application de référence pour des activités sociales spontanées. Rejoignez ou créez des
+                événements dans votre zone et rencontrez de nouvelles personnes en toute simplicité !</p>
+            <div>
+                <a href="#" class=""><img width="180" height="60"
+                        src="{{ URL::asset('assets/playstore.png') }}" alt=""></a>
+                <a href="#" class=""><img width="180" height="60"
+                        src="{{ URL::asset('assets/appstore.png') }}" alt=""></a>
             </div>
         </div>
-    </nav>
+    </section>
 
-    <!-- Hero section -->
-    <section class="hero">
+    <section class="image-gallery" style="text-align: -webkit-center;">
+        <div class="container">
+            <div class="col-md-6">
+                <img src="{{ URL::asset('assets/accueil3.png') }}" alt="Image 1">
+            </div>
+        </div>
+    </section>
+
+    <section class="notifications-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 d-flex align-items-center">
+                    <div class="notifications-content">
+                        <div class="notifications-text">
+                            <h4>Notifications</h4>
+                            <h2>Restez connecté avec les activités locales</h2>
+                            <p>Grâce à notre système de notifications, ne manquez aucune activité spontanée dans votre
+                                région. Dès qu'un événement vous est proposé, vous recevez une alerte instantanée et
+                                vous pouvez participer !</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex justify-content-center align-items-center">
+                    <div class="notifications-img-container" style="height: 50%; width: 50%;">
+                        <img src="{{ URL::asset('assets/telecharger.png') }}" alt="Two women smiling and connecting">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-5 bg-dark text-light">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <h1 class="display-4 animate__animated animate__fadeInLeft">Découvrez <strong>OnYVa</strong></h1>
-                    <p class="lead animate__animated animate__fadeInLeft animate__delay-1s">L’app qui vous connecte
-                        localement pour des activités sociales ou professionnelles</p>
-                    <a href="#telechargement"
-                        class="btn btn-purple btn-lg mt-4 animate__animated animate__fadeInUp animate__delay-2s">Télécharger
-                        l'app</a>
+                    <h2 class="mb-4">Proposez des activités en toute simplicité<br> et connectez-vous avec des
+                        personnes autour de vous</h2>
+                    <p class="mb-4">Avec OnYVa, proposez facilement des activités spontanées aux personnes autour de
+                        vous qui partagent vos centres d'intérêt. Qu'il s'agisse d'une sortie à la plage ou d'une soirée
+                        ciné, créer du lien n’a jamais été aussi simple !</p>
+                    <div class="d-flex">
+                        <div class="me-4">
+                            <i class="bi bi-ticket-perforated fs-3"></i>
+                            <h6 class="mt-2">Propositions d’activités</h6>
+                            <small>Exemple : « Je vais à la plage demain, qui veut venir ? »</small>
+                        </div>
+                        <div>
+                            <i class="bi bi-link-45deg fs-3"></i>
+                            <h6 class="mt-2">Rejoindre</h6>
+                            <small>Jusqu’à 5 personnes peuvent se regrouper pour une sortie spontanée.</small>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6 text-center">
-                    <img src="{{ URL::asset('assets/accueil3.png') }}"
-                        class="img-fluid animate__animated animate__fadeInRight" alt="App Mockup">
+                    <img src="{{ URL::asset('assets/7.png') }}" style="height: 500px" alt="Rencontre OnYVa"
+                        class="img-fluid rounded">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Fonctionnement -->
-    <section id="fonctionnement" class="container py-5">
-        <h2 class="text-center section-title">Comment ça marche</h2>
-        <div class="row align-items-center mb-5 animate__animated animate__fadeInUp">
-            <div class="col-md-6">
-                <h4>1. Proposez une activité</h4>
-                <p>Vous avez une idée ? Proposez-la en quelques clics : plage, sport, café, projet pro…</p>
-                <p>Publiez une invitation dans votre commune pour une sortie ou un projet pro.</p>
-            </div>
-            <div class="col-md-6 text-center">
-                <img src="{{ URL::asset('assets/create.png') }}" style="height: 500px" alt="étape 1" class="img-fluid">
-            </div>
-        </div>
-        <div
-            class="row align-items-center mb-5 flex-md-row-reverse animate__animated animate__fadeInUp animate__delay-1s">
-            <div class="col-md-6">
-                <h4>2. Choisissez les communes ciblées</h4>
-                <p>Définissez où envoyer l’invitation. Les utilisateurs de ces zones recevront une alerte.</p>
-            </div>
-            <div class="col-md-6 text-center">
-                <img src="{{ URL::asset('assets/commune2.png') }}" style="height: 500px" alt="étape 2"
-                    class="img-fluid">
-            </div>
-        </div>
-        <div class="row align-items-center mb-5 animate__animated animate__fadeInUp">
-            <div class="col-md-6">
-                <h4>3. Jusqu'à 5 personnes acceptent</h4>
-                <p>Les premiers intéressés sont réunis dans un chat de 24h pour s’organiser.</p>
-            </div>
-            <div class="col-md-6 text-center">
-                <img src="{{ URL::asset('assets/5persos.png') }}" style="height: 500px" alt="étape 1"
-                    class="img-fluid">
-            </div>
-        </div>
-        <div
-            class="row align-items-center mb-5 flex-md-row-reverse animate__animated animate__fadeInUp animate__delay-1s">
-            <div class="col-md-6">
-                <h4>4. Discutez et finalisez</h4>
-                <p>Le groupe reste actif pendant 24h pour échanger, décider du lieu et de l’heure.</p>
-            </div>
-            <div class="col-md-6 text-center">
-                <img src="{{ URL::asset('assets/organise2.png') }}" style="height: 500px" alt="étape 2"
-                    class="img-fluid">
-            </div>
-        </div>
-        <div class="row align-items-center mb-5 animate__animated animate__fadeInUp">
-            <div class="col-md-6">
-                <h4>5. Profitez !</h4>
-                <p>Il ne reste plus qu’à se rencontrer. Simple, local, humain.</p>
-            </div>
-            <div class="col-md-6 text-center">
-                <img src="{{ URL::asset('assets/pret.png') }}" style="height: 500px" alt="étape 1" class="img-fluid">
-            </div>
-        </div>
-    </section>
-
-    <!-- À propos -->
-    <section id="apropos" class="py-5 bg-light">
+    <section class="engage-section">
         <div class="container">
-            <div class="card p-4 shadow border-0">
-                <h2 class="section-title text-center">À propos de nous</h2>
-                <p class="text-center mb-0">OnYVa est une plateforme sociale et professionnelle qui facilite les
-                    rencontres et les sorties en communauté selon vos intérêts et votre localisation.</p>
-            </div>
-        </div>
-    </section>
+            <h4 class="sub-heading">Connecter</h4>
+            <h2 class="main-heading">Participez à des activités spontanées
+                <br>avec des amis
+            </h2>
+            <p class="lead-text">Rejoignez ou créez des groupes de discussion temporaires pour des activités
+                spontanées. Connectez-vous avec jusqu'à 5 participants pour une expérience unique.</p>
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <!-- Téléchargement -->
-    <section id="telechargement" class="py-5">
-        <div class="container">
-            <div class="card-download">
-                <div class="flex-grow-1">
-                    <h3 class="" style="color: #571c87">Téléchargez l'application OnYVa</h3>
-                    <p>Disponible très bientôt sur Android et iOS.</p>
-                    <a href="#" class="btn btn-purple me-2">📱 Android</a>
-                    <a href="#" class="btn btn-outline-dark">🍏 iOS</a>
-                </div>
-                <div>
-                    <img src="{{ URL::asset('assets/telecharger.png') }}" height="100" alt="Aperçu app"
-                        class="image-overlap">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="bg-light py-5">
-        <div class="container">
-            <h2 class="section-title text-center">Contact</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>📍 Adresse</h5>
-                    <p>Abidjan, Côte d’Ivoire</p>
-                    <h5>📞 Téléphone</h5>
-                    <p>+225 07 00 00 00 00</p>
-                    <h5>✉️ Email</h5>
-                    <p>contact@onyva.app</p>
-                </div>
-                <div class="col-md-6">
-                    <form>
-                        <div class="mb-3">
-                            <input type="text" class="form-control" placeholder="Votre nom">
-                        </div>
-                        <div class="mb-3">
-                            <input type="email" class="form-control" placeholder="Votre email">
-                        </div>
-                        <div class="mb-3">
-                            <textarea class="form-control" rows="4" placeholder="Votre message"></textarea>
-                        </div>
-                        <button class="btn btn-purple w-100">Envoyer</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="row">
+            <div class="row mt-5">
                 <div class="col-md-4">
-                    <h5>OnYVa</h5>
-                    <p>Créer des liens autour de vous, simplement.</p>
+                    <div class="feature-item">
+                        <div class="icon-box">
+                            <i class="bi bi-chat-text"></i>
+                        </div>
+                        <h5>Groupes de discussion temporaires pour<br> des connexions instantanées</h5>
+                        <p>Créez une discussion de groupe qui ne dure que 24 heures</p>
+                    </div>
                 </div>
                 <div class="col-md-4">
-                    <h5>Liens utiles</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#apropos" class="text-light">À propos</a></li>
-                        <li><a href="#fonctionnement" class="text-light">Fonctionnement</a></li>
-                        <li><a href="#telechargement" class="text-light">Télécharger</a></li>
-                    </ul>
+                    <div class="feature-item">
+                        <div class="icon-box">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <h5>Limité à 5 participants pour
+                            <br> une touche personnelle
+                        </h5>
+                        <p>Profitez de conversations intimes avec un petit groupe.</p>
+                    </div>
                 </div>
                 <div class="col-md-4">
-                    <h5>Suivez-nous</h5>
-                    <a href="#" class="text-light me-2"><i class="bi bi-facebook"></i></a>
-                    <a href="#" class="text-light me-2"><i class="bi bi-instagram"></i></a>
-                    <a href="#" class="text-light me-2"><i class="bi bi-twitter"></i></a>
-                    <a href="https://wa.me/2250700000000" class="text-light"><i class="bi bi-whatsapp"></i></a>
+                    <div class="feature-item">
+                        <div class="icon-box">
+                            <i class="bi bi-trash"></i>
+                        </div>
+                        <h5>La suppression automatique garantit<br> la confidentialité et la fraîcheur</h5>
+                        <p>Votre groupe disparaît après 24 heures pour des raisons de confidentialité.</p>
+                    </div>
                 </div>
             </div>
-            <hr class="text-secondary">
-            <p class="text-center small">&copy; 2025 OnYVa. Tous droits réservés.</p>
+
+            <div class="buttons-group mt-4">
+                <a href="features" class="btn btn-outline-dark">Apprendre encore plus <i
+                        class="bi bi-chevron-right"></i></a>
+            </div>
         </div>
-    </footer>
+    </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <section class="discover-section">
+        <div class="container">
+            <div class="row align-items-stretch">
+                <div class="col-md-6 d-flex">
+                    <div class="text-content">
+                        <h2>Découvrez de nouveaux amis grâce à des activités spontanées avec OnYVa</h2>
+                        <p>
+                            OnYVa vous met en relation avec des personnes partageant les mêmes idées et désireuses de
+                            participer à des activités spontanées dans votre région. Découvrez le plaisir de vous faire
+                            de nouveaux amis tout en explorant ensemble des aventures locales !
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex justify-content-center align-items-center">
+                    <div class="image-container" style="height: 500px">
+                        <img src="{{ URL::asset('assets/8.png') }}"
+                            alt="Person relaxing on a sofa with plants, using a laptop">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-</html>
+    <section class="call-to-action-section">
+        <div class="container">
+            <h2>Rejoignez l'aventure aujourd'hui !</h2>
+            <p>Téléchargez OnYVa maintenant et commencez à rencontrer de nouveaux amis grâce à des activités spontanées
+                dans votre région !</p>
+            <div>
+                <a href="#" class=""><img width="180" height="60"
+                        src="{{ URL::asset('assets/playstore.png') }}" alt=""></a>
+                <a href="#" class=""><img width="180" height="60"
+                        src="{{ URL::asset('assets/appstore.png') }}" alt=""></a>
+            </div>
+        </div>
+    </section>
 
+    <section class="testimonial-section">
+        <div class="container">
+            <img src="https://uploads-ssl.webflow.com/img/webflow-logo-small.svg" alt="Webflow Logo" class="webflow-logo">
+            <p class="testimonial-quote">"OnYVa a transformé mes week-ends ! J'ai rencontré des gens formidables et
+                créé des souvenirs inoubliables grâce à des activités spontanées."</p>
+            <img src="https://i.imgur.com/your-avatar-here.jpg" alt="Alice Johnson Avatar" class="author-avatar">
+            <div class="author-name">Alice Johnson</div>
+            <div class="author-title">Organisateur d'événements, indépendant</div>
 
-<!-- Bandeau d'annonce OnYVa -->
-<div id="bandeau-on-y-va"
-    style="background-color:#571c87; color:white; padding: 15px 20px; text-align:center; position: fixed; bottom: 0; width: 100%; z-index: 9999;">
-    <span style="font-size: 1rem;">
-        🚀 <strong>OnYVa est disponible !</strong> Découvrez l'app qui vous connecte localement.
-    </span>
-    <a href="https://play.google.com/store/apps/details?id=com.onyva.app" target="_blank"
-        style="background-color:#fff; color:#571c87; padding:8px 16px; margin-left:15px; border-radius:5px; font-weight:bold; text-decoration:none;">
-        Télécharger
-    </a>
-    <button onclick="document.getElementById('bandeau-on-y-va').style.display='none'"
-        style="background:none; border:none; color:white; font-size:1.2rem; margin-left:10px;">×</button>
-</div>
+            <div class="testimonial-navigation">
+                <span class="nav-arrow"><i class="bi bi-arrow-left"></i></span>
+                <div class="nav-dots">
+                    <span class="active"></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span class="nav-arrow"><i class="bi bi-arrow-right"></i></span>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-section">
+        <div class="container">
+            <h4 class="team-heading">Notre équipe</h4>
+            <h2 class="main-heading">Rencontrez notre équipe dévouée et innovante</h2>
+            <p class="team-description">Rencontrez les talents qui animent la mission d'OnYVa : connecter les gens
+                grâce à des activités spontanées. Notre équipe diversifiée est passionnée par la création d'expériences
+                fluides et agréables pour nos utilisateurs.</p>
+
+            <div class="row mt-5">
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-member-card">
+                        <img src="https://i.imgur.com/placeholder-alice.jpg" alt="Alice Johnson" class="member-avatar">
+                        <div class="member-name">Alice Johnson</div>
+                        <div class="member-role">CEO & Co-founder</div>
+                        <p class="member-bio">Alice leads our vision and strategy, bringing years of experience in tech
+                            startups and community building.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="bi bi-linkedin"></i></a>
+                            <a href="#"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#"><i class="bi bi-globe"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-member-card">
+                        <img src="https://i.imgur.com/placeholder-mark.jpg" alt="Mark Smith" class="member-avatar">
+                        <div class="member-name">Mark Smith</div>
+                        <div class="member-role">CTO & Co-founder</div>
+                        <p class="member-bio">Mark is the tech wizard behind OnYVa, ensuring our platform is robust,
+                            scalable, and user-friendly.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="bi bi-linkedin"></i></a>
+                            <a href="#"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#"><i class="bi bi-globe"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-member-card">
+                        <img src="https://i.imgur.com/placeholder-sara.jpg" alt="Sara Lee" class="member-avatar">
+                        <div class="member-name">Sara Lee</div>
+                        <div class="member-role">Head of Product Design</div>
+                        <p class="member-bio">Sara crafts intuitive and beautiful user experiences, making OnYVa a joy
+                            to use for everyone.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="bi bi-linkedin"></i></a>
+                            <a href="#"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#"><i class="bi bi-globe"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-member-card">
+                        <img src="https://i.imgur.com/placeholder-tom.jpg" alt="Tom Brown" class="member-avatar">
+                        <div class="member-name">Tom Brown</div>
+                        <div class="member-role">Community Manager</div>
+                        <p class="member-bio">Tom ensures our users feel heard and valued, fostering a vibrant and
+                            engaging community.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="bi bi-linkedin"></i></a>
+                            <a href="#"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#"><i class="bi bi-globe"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-member-card">
+                        <img src="https://i.imgur.com/placeholder-emily.jpg" alt="Emily White" class="member-avatar">
+                        <div class="member-name">Emily White</div>
+                        <div class="member-role">Marketing Lead</div>
+                        <p class="member-bio">Emily champions OnYVa's message, reaching new audiences and spreading the
+                            word about spontaneous fun.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="bi bi-linkedin"></i></a>
+                            <a href="#"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#"><i class="bi bi-globe"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="hiring-block team-member-card">
+                        <h3>Nous embauchons !</h3>
+                        <p>Rejoignez notre démarche innovante pour connecter les gens. Explorez des opportunités de
+                            carrière passionnantes.</p>
+                        <a href="careers" class="btn btn-dark">Postes ouverts</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+@endsection
